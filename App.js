@@ -80,6 +80,15 @@ export default function App() {
         Alert.alert ("Aviso", "Este aparelho não consegue fazer envio de sms.");
         return;
        }
+
+       try{
+        const { result } = await SMS.sendSMSAsync (
+          [limparNumero(numero)],
+          mensagem
+        );
+       } catch (error) {
+
+       }
     }
   }
 
