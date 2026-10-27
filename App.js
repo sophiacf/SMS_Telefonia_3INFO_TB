@@ -31,6 +31,57 @@ export default function App() {
     return true;
   }
 
+  function registrar(acao){
+    const hora = new date().toLocaleTimeString('pt-BR',
+      {
+        hour: '2-digit',
+        minute: '2-digit'
+      }
+    );
+    setHistorico([`${hora} - ${acao} para ${numero}`, ...historico])
+  }
+
+
+  async function ligar () {
+    if (numeroValido()) {
+      try {
+        const url = `tel: ${limparNumero(numero)}`;
+        const podeAbrir = await Linking.canOpenURL(url);
+
+        if (podeAbrir) {
+          await Linking.openURL(url);
+          registrar("Ligação");
+          //fazer um registro da ligação para o usuário
+        }
+
+        else {
+          Alert.alert ("Erro", "Este aparelho não consegue fazer ligações")
+        }
+
+      } catch (error) {
+
+      } 
+    }
+  }
+  
+
+  async function enviarSMS () {
+    if (numeroValido()) {
+      if (mensagem.trim() === "") {
+        Alert.alert(
+          "Mensagem vazia",
+          "Escreva alguma coisa antes de enviar."
+        );
+        return;
+       }
+
+       const disponivel = await SMS.isAvaliableAsync();
+       if (!disponivel) {
+        Alert.alert ("Aviso", "Este aparelho não consegue fazer envio de sms.");
+        return;
+       }
+    }
+  }
 
   return (
     <View>
